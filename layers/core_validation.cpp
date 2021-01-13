@@ -2548,6 +2548,48 @@ void CoreChecks::PostCallRecordCreateDevice(VkPhysicalDevice gpu, const VkDevice
         [core_checks](CMD_BUFFER_STATE *cb_node, const IMAGE_VIEW_STATE &iv_state, VkImageLayout layout) -> void {
             core_checks->SetImageViewInitialLayout(cb_node, iv_state, layout);
         });
+
+    // Allocate shader validation cache
+    if (!core_checks->coreValidationCache) {
+        size_t validation_cache_size = 0;
+        void *validation_cache_data = nullptr;
+        std::string read_file_name = "validation_cache_data.bin";
+        FILE *read_file = fopen(read_file_name.c_str(), "rb");
+
+        if (read_file) {
+            // Determine cache size
+            fseek(read_file, 0, SEEK_END);
+            validation_cache_size = ftell(read_file);
+            rewind(read_file);
+
+            // Allocate memory to hold the initial cache data
+            validation_cache_data = (char *)malloc(sizeof(char) * validation_cache_size);
+            if (validation_cache_data == nullptr) {
+                printf("Validation Cache Memory Error\n");
+                return;
+            }
+
+            // Read the data into our buffer
+            size_t result = fread(validation_cache_data, 1, validation_cache_size, read_file);
+            if (result != validation_cache_size) {
+                printf("Validation Cache Reading Error\n");
+                free(validation_cache_data);
+                fclose(read_file);
+                return;
+            }
+
+            // Clean up and print results
+            fclose(read_file);
+        }
+        VkValidationCacheCreateInfoEXT cacheCreateInfo = {};
+        cacheCreateInfo.sType = VK_STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT;
+        cacheCreateInfo.pNext = NULL;
+        cacheCreateInfo.initialDataSize = validation_cache_size;
+        cacheCreateInfo.pInitialData = validation_cache_data;
+        cacheCreateInfo.flags = 0;
+        CoreLayerCreateValidationCacheEXT(*pDevice, &cacheCreateInfo, nullptr, &core_checks->coreValidationCache);
+        if (validation_cache_data) free(validation_cache_data);
+    }
 }
 
 void CoreChecks::PreCallRecordDestroyDevice(VkDevice device, const VkAllocationCallbacks *pAllocator) {
@@ -2555,6 +2597,31 @@ void CoreChecks::PreCallRecordDestroyDevice(VkDevice device, const VkAllocationC
     imageLayoutMap.clear();
 
     StateTracker::PreCallRecordDestroyDevice(device, pAllocator);
+
+    if (coreValidationCache) {
+        size_t validation_cache_size = 0;
+        void *validation_cache_data = nullptr;
+
+        CoreLayerGetValidationCacheDataEXT(device, coreValidationCache, &validation_cache_size, nullptr);
+
+        // Allocate memory to hold the populated cache data
+        validation_cache_data = (char *)malloc(sizeof(char) * validation_cache_size);
+        if (!validation_cache_data) {
+            printf("Validation Cache Memory Error\n");
+            return;
+        }
+
+        CoreLayerGetValidationCacheDataEXT(device, coreValidationCache, &validation_cache_size, validation_cache_data);
+
+        FILE *write_file;
+        std::string writeFileName = "validation_cache_data.bin";
+        write_file = fopen(writeFileName.c_str(), "wb");
+        if (write_file) {
+            fwrite(validation_cache_data, sizeof(char), validation_cache_size, write_file);
+            fclose(write_file);
+        }
+        CoreLayerDestroyValidationCacheEXT(device, coreValidationCache, NULL);
+    }
 }
 
 // For given stage mask, if Geometry shader stage is on w/o GS being enabled, report geo_error_id

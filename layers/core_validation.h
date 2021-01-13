@@ -100,6 +100,7 @@ class CoreChecks : public ValidationStateTracker {
     GlobalQFOTransferBarrierMap<VkImageMemoryBarrier> qfo_release_image_barrier_map;
     GlobalQFOTransferBarrierMap<VkBufferMemoryBarrier> qfo_release_buffer_barrier_map;
     GlobalImageLayoutMap imageLayoutMap;
+    VkValidationCacheEXT coreValidationCache = VK_NULL_HANDLE;
 
     CoreChecks() { container_type = LayerObjectTypeCoreValidation; }
 
