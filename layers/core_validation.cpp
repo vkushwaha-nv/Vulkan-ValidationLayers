@@ -5882,7 +5882,7 @@ bool CoreChecks::ValidateGraphicsPipelineBindPoint(const CMD_BUFFER_STATE *cb_st
                 !pipeline_state->graphicsPipelineCI.pRasterizationState->rasterizerDiscardEnable &&
                 pipeline_state->attachments[i].blendEnable &&
                 !(image_state->format_features & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT)) {
-                skip |= LogError(device, "VUID-VkGraphicsPipelineCreateInfo-blendEnable-02023",
+                skip |= LogError(device, "VUID-VkGraphicsPipelineCreateInfo-blendEnable-04717",
                                  "vkCreateGraphicsPipelines(): pipeline.pColorBlendState.pAttachments[" PRINTF_SIZE_T_SPECIFIER
                                  "].blendEnable is VK_TRUE but format %s associated with this attached image (%s) does "
                                  "not support VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT.",
