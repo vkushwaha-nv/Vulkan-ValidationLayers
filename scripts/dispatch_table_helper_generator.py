@@ -257,7 +257,8 @@ class DispatchTableHelperOutputGenerator(OutputGenerator):
                     disp_obj = self.registry.tree.find("commands/command/[@name='%s']/param/type" % command_name)
                     if disp_obj is None:
                         cmd_info = self.registry.tree.find("commands/command/[@name='%s']" % command_name)
-                        alias_name = cmd_info.get('alias')
+                        if cmd_info is not None:
+                            alias_name = cmd_info.get('alias')
                         if alias_name is not None:
                             disp_obj = self.registry.tree.find("commands/command/[@name='%s']/param/type" % alias_name)
                     if 'VkInstance' != disp_obj.text and 'VkPhysicalDevice' != disp_obj.text:

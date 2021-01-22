@@ -27,7 +27,7 @@
 
 #include "stateless_validation.h"
 
-const uint32_t GeneratedVulkanHeaderVersion = 166;
+const uint32_t GeneratedVulkanHeaderVersion = 167;
 
 const DECORATE_UNUSED VkAccessFlags AllVkAccessFlagBits = VK_ACCESS_INDIRECT_COMMAND_READ_BIT|VK_ACCESS_INDEX_READ_BIT|VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT|VK_ACCESS_UNIFORM_READ_BIT|VK_ACCESS_INPUT_ATTACHMENT_READ_BIT|VK_ACCESS_SHADER_READ_BIT|VK_ACCESS_SHADER_WRITE_BIT|VK_ACCESS_COLOR_ATTACHMENT_READ_BIT|VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT|VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT|VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT|VK_ACCESS_TRANSFER_READ_BIT|VK_ACCESS_TRANSFER_WRITE_BIT|VK_ACCESS_HOST_READ_BIT|VK_ACCESS_HOST_WRITE_BIT|VK_ACCESS_MEMORY_READ_BIT|VK_ACCESS_MEMORY_WRITE_BIT|VK_ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT|VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT|VK_ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT|VK_ACCESS_CONDITIONAL_RENDERING_READ_BIT_EXT|VK_ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT|VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR|VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR|VK_ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV|VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_NV|VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_NV|VK_ACCESS_FRAGMENT_DENSITY_MAP_READ_BIT_EXT|VK_ACCESS_FRAGMENT_SHADING_RATE_ATTACHMENT_READ_BIT_KHR|VK_ACCESS_COMMAND_PREPROCESS_READ_BIT_NV|VK_ACCESS_COMMAND_PREPROCESS_WRITE_BIT_NV;
 const DECORATE_UNUSED VkAttachmentDescriptionFlags AllVkAttachmentDescriptionFlagBits = VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
@@ -2085,8 +2085,6 @@ bool StatelessValidation::ValidatePnextStructContents(const char *api_name, cons
         // Validation code for VkSampleLocationsInfoEXT structure members
         case VK_STRUCTURE_TYPE_SAMPLE_LOCATIONS_INFO_EXT: { // Covers VUID-VkSampleLocationsInfoEXT-sType-sType
             VkSampleLocationsInfoEXT *structure = (VkSampleLocationsInfoEXT *) header;
-            skip |= validate_flags("VkSampleLocationsInfoEXT", "sampleLocationsPerPixel", "VkSampleCountFlagBits", AllVkSampleCountFlagBits, structure->sampleLocationsPerPixel, kOptionalSingleBit, "VUID-VkSampleLocationsInfoEXT-sampleLocationsPerPixel-parameter");
-
             skip |= validate_array("VkSampleLocationsInfoEXT", "sampleLocationsCount", "pSampleLocations", structure->sampleLocationsCount, &structure->pSampleLocations, false, true, kVUIDUndefined, "VUID-VkSampleLocationsInfoEXT-pSampleLocations-parameter");
 
             if (structure->pSampleLocations != NULL)
@@ -2108,8 +2106,6 @@ bool StatelessValidation::ValidatePnextStructContents(const char *api_name, cons
                 {
                     skip |= validate_struct_type("VkRenderPassSampleLocationsBeginInfoEXT", ParameterName("pAttachmentInitialSampleLocations[%i].sampleLocationsInfo", ParameterName::IndexVector{ attachmentInitialSampleLocationsIndex }), "VK_STRUCTURE_TYPE_SAMPLE_LOCATIONS_INFO_EXT", &(structure->pAttachmentInitialSampleLocations[attachmentInitialSampleLocationsIndex].sampleLocationsInfo), VK_STRUCTURE_TYPE_SAMPLE_LOCATIONS_INFO_EXT, false, kVUIDUndefined, "VUID-VkSampleLocationsInfoEXT-sType-sType");
 
-                    skip |= validate_flags("VkRenderPassSampleLocationsBeginInfoEXT", ParameterName("pAttachmentInitialSampleLocations[%i].sampleLocationsInfo.sampleLocationsPerPixel", ParameterName::IndexVector{ attachmentInitialSampleLocationsIndex }), "VkSampleCountFlagBits", AllVkSampleCountFlagBits, structure->pAttachmentInitialSampleLocations[attachmentInitialSampleLocationsIndex].sampleLocationsInfo.sampleLocationsPerPixel, kOptionalSingleBit, "VUID-VkSampleLocationsInfoEXT-sampleLocationsPerPixel-parameter");
-
                     skip |= validate_array("VkRenderPassSampleLocationsBeginInfoEXT", ParameterName("pAttachmentInitialSampleLocations[%i].sampleLocationsInfo.sampleLocationsCount", ParameterName::IndexVector{ attachmentInitialSampleLocationsIndex }), ParameterName("pAttachmentInitialSampleLocations[%i].sampleLocationsInfo.pSampleLocations", ParameterName::IndexVector{ attachmentInitialSampleLocationsIndex }), structure->pAttachmentInitialSampleLocations[attachmentInitialSampleLocationsIndex].sampleLocationsInfo.sampleLocationsCount, &structure->pAttachmentInitialSampleLocations[attachmentInitialSampleLocationsIndex].sampleLocationsInfo.pSampleLocations, false, true, kVUIDUndefined, "VUID-VkSampleLocationsInfoEXT-pSampleLocations-parameter");
 
                     if (structure->pAttachmentInitialSampleLocations[attachmentInitialSampleLocationsIndex].sampleLocationsInfo.pSampleLocations != NULL)
@@ -2129,8 +2125,6 @@ bool StatelessValidation::ValidatePnextStructContents(const char *api_name, cons
                 {
                     skip |= validate_struct_type("VkRenderPassSampleLocationsBeginInfoEXT", ParameterName("pPostSubpassSampleLocations[%i].sampleLocationsInfo", ParameterName::IndexVector{ postSubpassSampleLocationsIndex }), "VK_STRUCTURE_TYPE_SAMPLE_LOCATIONS_INFO_EXT", &(structure->pPostSubpassSampleLocations[postSubpassSampleLocationsIndex].sampleLocationsInfo), VK_STRUCTURE_TYPE_SAMPLE_LOCATIONS_INFO_EXT, false, kVUIDUndefined, "VUID-VkSampleLocationsInfoEXT-sType-sType");
 
-                    skip |= validate_flags("VkRenderPassSampleLocationsBeginInfoEXT", ParameterName("pPostSubpassSampleLocations[%i].sampleLocationsInfo.sampleLocationsPerPixel", ParameterName::IndexVector{ postSubpassSampleLocationsIndex }), "VkSampleCountFlagBits", AllVkSampleCountFlagBits, structure->pPostSubpassSampleLocations[postSubpassSampleLocationsIndex].sampleLocationsInfo.sampleLocationsPerPixel, kOptionalSingleBit, "VUID-VkSampleLocationsInfoEXT-sampleLocationsPerPixel-parameter");
-
                     skip |= validate_array("VkRenderPassSampleLocationsBeginInfoEXT", ParameterName("pPostSubpassSampleLocations[%i].sampleLocationsInfo.sampleLocationsCount", ParameterName::IndexVector{ postSubpassSampleLocationsIndex }), ParameterName("pPostSubpassSampleLocations[%i].sampleLocationsInfo.pSampleLocations", ParameterName::IndexVector{ postSubpassSampleLocationsIndex }), structure->pPostSubpassSampleLocations[postSubpassSampleLocationsIndex].sampleLocationsInfo.sampleLocationsCount, &structure->pPostSubpassSampleLocations[postSubpassSampleLocationsIndex].sampleLocationsInfo.pSampleLocations, false, true, kVUIDUndefined, "VUID-VkSampleLocationsInfoEXT-pSampleLocations-parameter");
 
                     if (structure->pPostSubpassSampleLocations[postSubpassSampleLocationsIndex].sampleLocationsInfo.pSampleLocations != NULL)
@@ -2149,8 +2143,6 @@ bool StatelessValidation::ValidatePnextStructContents(const char *api_name, cons
             skip |= validate_bool32("VkPipelineSampleLocationsStateCreateInfoEXT", "sampleLocationsEnable", structure->sampleLocationsEnable);
 
             skip |= validate_struct_type("VkPipelineSampleLocationsStateCreateInfoEXT", "sampleLocationsInfo", "VK_STRUCTURE_TYPE_SAMPLE_LOCATIONS_INFO_EXT", &(structure->sampleLocationsInfo), VK_STRUCTURE_TYPE_SAMPLE_LOCATIONS_INFO_EXT, false, kVUIDUndefined, "VUID-VkSampleLocationsInfoEXT-sType-sType");
-
-            skip |= validate_flags("VkPipelineSampleLocationsStateCreateInfoEXT", "sampleLocationsInfo.sampleLocationsPerPixel", "VkSampleCountFlagBits", AllVkSampleCountFlagBits, structure->sampleLocationsInfo.sampleLocationsPerPixel, kOptionalSingleBit, "VUID-VkSampleLocationsInfoEXT-sampleLocationsPerPixel-parameter");
 
             skip |= validate_array("VkPipelineSampleLocationsStateCreateInfoEXT", "sampleLocationsInfo.sampleLocationsCount", "sampleLocationsInfo.pSampleLocations", structure->sampleLocationsInfo.sampleLocationsCount, &structure->sampleLocationsInfo.pSampleLocations, false, true, kVUIDUndefined, "VUID-VkSampleLocationsInfoEXT-pSampleLocations-parameter");
 
@@ -8414,8 +8406,6 @@ bool StatelessValidation::PreCallValidateImportSemaphoreWin32HandleKHR(
         skip |= validate_required_handle("vkImportSemaphoreWin32HandleKHR", "pImportSemaphoreWin32HandleInfo->semaphore", pImportSemaphoreWin32HandleInfo->semaphore);
 
         skip |= validate_flags("vkImportSemaphoreWin32HandleKHR", "pImportSemaphoreWin32HandleInfo->flags", "VkSemaphoreImportFlagBits", AllVkSemaphoreImportFlagBits, pImportSemaphoreWin32HandleInfo->flags, kOptionalFlags, "VUID-VkImportSemaphoreWin32HandleInfoKHR-flags-parameter");
-
-        skip |= validate_flags("vkImportSemaphoreWin32HandleKHR", "pImportSemaphoreWin32HandleInfo->handleType", "VkExternalSemaphoreHandleTypeFlagBits", AllVkExternalSemaphoreHandleTypeFlagBits, pImportSemaphoreWin32HandleInfo->handleType, kOptionalSingleBit, "VUID-VkImportSemaphoreWin32HandleInfoKHR-handleType-parameter");
     }
     return skip;
 }
@@ -8940,8 +8930,6 @@ bool StatelessValidation::PreCallValidateImportFenceWin32HandleKHR(
         skip |= validate_required_handle("vkImportFenceWin32HandleKHR", "pImportFenceWin32HandleInfo->fence", pImportFenceWin32HandleInfo->fence);
 
         skip |= validate_flags("vkImportFenceWin32HandleKHR", "pImportFenceWin32HandleInfo->flags", "VkFenceImportFlagBits", AllVkFenceImportFlagBits, pImportFenceWin32HandleInfo->flags, kOptionalFlags, "VUID-VkImportFenceWin32HandleInfoKHR-flags-parameter");
-
-        skip |= validate_flags("vkImportFenceWin32HandleKHR", "pImportFenceWin32HandleInfo->handleType", "VkExternalFenceHandleTypeFlagBits", AllVkExternalFenceHandleTypeFlagBits, pImportFenceWin32HandleInfo->handleType, kOptionalSingleBit, "VUID-VkImportFenceWin32HandleInfoKHR-handleType-parameter");
     }
     return skip;
 }
@@ -11327,8 +11315,6 @@ bool StatelessValidation::PreCallValidateCmdSetSampleLocationsEXT(
     if (pSampleLocationsInfo != NULL)
     {
         skip |= validate_struct_pnext("vkCmdSetSampleLocationsEXT", "pSampleLocationsInfo->pNext", NULL, pSampleLocationsInfo->pNext, 0, NULL, GeneratedVulkanHeaderVersion, kVUIDUndefined, kVUIDUndefined);
-
-        skip |= validate_flags("vkCmdSetSampleLocationsEXT", "pSampleLocationsInfo->sampleLocationsPerPixel", "VkSampleCountFlagBits", AllVkSampleCountFlagBits, pSampleLocationsInfo->sampleLocationsPerPixel, kOptionalSingleBit, "VUID-VkSampleLocationsInfoEXT-sampleLocationsPerPixel-parameter");
 
         // No xml-driven validation
 
@@ -13721,7 +13707,7 @@ bool StatelessValidation::PreCallValidateGetAccelerationStructureBuildSizesKHR(
         // No xml-driven validation
     }
     if (pBuildInfo != NULL) {
-        skip |= validate_array("vkGetAccelerationStructureBuildSizesKHR", "pBuildInfo->geometryCount", "pMaxPrimitiveCounts", pBuildInfo->geometryCount, &pMaxPrimitiveCounts, true, true, kVUIDUndefined, "VUID-vkGetAccelerationStructureBuildSizesKHR-pMaxPrimitiveCounts-parameter");
+        skip |= validate_array("vkGetAccelerationStructureBuildSizesKHR", "pBuildInfo->geometryCount", "pMaxPrimitiveCounts", pBuildInfo->geometryCount, &pMaxPrimitiveCounts, true, false, kVUIDUndefined, "VUID-vkGetAccelerationStructureBuildSizesKHR-pMaxPrimitiveCounts-parameter");
     }
     skip |= validate_struct_type("vkGetAccelerationStructureBuildSizesKHR", "pSizeInfo", "VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR", pSizeInfo, VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR, true, "VUID-vkGetAccelerationStructureBuildSizesKHR-pSizeInfo-parameter", "VUID-VkAccelerationStructureBuildSizesInfoKHR-sType-sType");
     if (!skip) skip |= manual_PreCallValidateGetAccelerationStructureBuildSizesKHR(device, buildType, pBuildInfo, pMaxPrimitiveCounts, pSizeInfo);
