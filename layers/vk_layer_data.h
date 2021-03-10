@@ -700,7 +700,7 @@ void FreeLayerDataPtr(void *data_key, std::unordered_map<void *, DATA_T *> &laye
 
 // A C++11 approximation of std::optional
 template <typename T>
-struct Optional {
+class Optional {
   protected:
     union Store {
         Store(){};   // Do nothing.  That's the point.
@@ -711,9 +711,9 @@ struct Optional {
 
   public:
     Optional() : init_(false) {}
-    ~Optional() {
-        if (init_) store_.obj.~T();
-    }
+    Optional(const Optional &other) : init_(false) { *this = other; }
+    Optional(Optional &&other) : init_(false) { *this = std::move(other); }
+    ~Optional() { DeInit(); }
     template <typename... Args>
     T &emplace(const Args &...args) {
         init_ = true;
@@ -737,8 +737,42 @@ struct Optional {
         return nullptr;
     }
     operator bool() const { return init_; }
+    bool has_value() const { return init_; }
+
+    Optional &operator=(const Optional &other) {
+        if (other.has_value()) {
+            if (has_value()) {
+                store_.obj = other.store_.obj;
+            } else {
+                emplace(other.store_.obj);
+            }
+        } else {
+            DeInit();
+        }
+        return *this;
+    }
+
+    Optional &operator=(Optional &&other) {
+        if (other.has_value()) {
+            if (has_value()) {
+                store_.obj = std::move(other.store_.obj);
+            } else {
+                emplace(std::move(other.store_.obj));
+            }
+            other.DeInit();
+        } else {
+            DeInit();
+        }
+        return *this;
+    }
 
   protected:
+    void DeInit() {
+        if (init_) {
+            store_.obj.~T();
+            init_ = false;
+        }
+    }
     Store store_;
     bool init_;
 };
