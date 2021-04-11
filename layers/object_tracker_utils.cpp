@@ -665,6 +665,10 @@ bool ObjectLifetimes::PreCallValidateAllocateDescriptorSets(VkDevice device, con
                                "VUID-VkDescriptorSetAllocateInfo-pSetLayouts-parameter",
                                "VUID-VkDescriptorSetAllocateInfo-commonparent");
     }
+    if (pAllocateInfo->descriptorSetCount <= 0) {
+        skip |= LogError(pAllocateInfo->descriptorSetCount, "VUID-VkDescriptorSetAllocateInfo-descriptorSetCount-arraylength",
+                         "VkDescriptorSetAllocateInfo descriptorSetCount is not greater than 0");
+    }
     return skip;
 }
 
